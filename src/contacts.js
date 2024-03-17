@@ -1,4 +1,5 @@
 // contacts.js
+const fs = require('fs').promises;
 
 /*
  * Розкоментуй і запиши значення
