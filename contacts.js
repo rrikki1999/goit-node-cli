@@ -1,7 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
 
-// const contactsPath = path.join(__dirname, "contacts.json");
 const contactsPath = path.resolve("db", "contacts.json");
 
 export async function listContacts() {
@@ -25,11 +24,18 @@ export async function getContactById(contactId) {
 export async function removeContact(contactId) {
   try {
     const contacts = await listContacts();
+    const removedContact = contacts.find(
+      (contact) => contact.id === contactId
+    );
+    if (!removedContact) {
+      console.log("Such contact with such ID was not found");
+      return null;
+    }
     const updatedContacts = contacts.filter(
       (contact) => contact.id !== contactId
     );
     await fs.writeFile(contactsPath, JSON.stringify(updatedContacts, null, 2));
-    return updatedContacts.find((contact) => contact.id === contactId) || null;
+    return removedContact;
   } catch (error) {
     throw error;
   }
